@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    ul, li {
+      list-style-type: none;
+    }
+    .highlight {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+  <title>Document</title>
+</head>
+<body>
+  <select name="" id="">
+    <option value="Ted">王浩</option>
+    <option value="Trump">特朗普</option>
+    <option value="Galileo">伽利略</option>
+  </select>
+  <input type="button" value="点我查询人物资料">
+  <div id="result"></div>
+  <script>
+    let input = document.querySelector('input');
+    input.addEventListener('click', function() {
+      let value = document.querySelector('select').value;
+      getData('get', 'http://127.0.0.1:80/de2.php?value='+value);
+    })
+    function getData(method, url) {
+      let xhr = new XMLHttpRequest();
+      xhr.open(method, url);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          let data = JSON.parse(xhr.responseText);
+          let ul = '<ul>';
+          ul += `<li>您所查询的人物是<span class="highlight">${data.name}</span></li>`;
+          ul += `<li>他的职业是<span class="highlight">${data.profession}</span></li>`;
+          ul += `<li>他的国籍是<span class="highlight">${data.nationality}</span></li>`;
+          ul += '</ul>';
+          let result = document.querySelector('#result');
+          result.innerHTML = ul;
+          document.body.appendChild(result);
+        }
+      };
+      xhr.send(null);
+    }
+  </script>
+</body>
+</html>
